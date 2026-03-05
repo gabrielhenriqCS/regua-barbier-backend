@@ -16,28 +16,35 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(status).body(new ErrorResponse(status.value(), mensagem));
     }
 
-    @ExceptionHandler(ClienteNaoEncontrado.class)
-    public ResponseEntity<ErrorResponse> handlerClienteNaoEncontrado(RuntimeException e) {
+    // 404 - Recursos não encontrados
+    @ExceptionHandler({
+            ClienteNaoEncontrado.class,
+            BarbeiroNaoEncontrado.class,
+            AgendamentoNaoEncontrado.class,
+            ServicoNaoEncontrado.class
+    })
+    public ResponseEntity<ErrorResponse> handlerNotFound(RuntimeException e) {
         return buildResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler(BarbeiroNaoEncontrado.class)
-    public ResponseEntity<ErrorResponse> handlerBarbeiroNaoEncontrado(RuntimeException e) {
-        return buildResponse(HttpStatus.NOT_FOUND, e.getMessage());
-    }
-
-    @ExceptionHandler(AgendamentoNaoEncontrado.class)
-    public ResponseEntity<ErrorResponse> handlerAgendamentoNaoEncontrado(RuntimeException e) {
-        return buildResponse(HttpStatus.NOT_FOUND, e.getMessage());
-    }
-
-    @ExceptionHandler(ServicoNaoEncontrado.class)
-    public ResponseEntity<ErrorResponse> handlerServicoNaoEncontrado(RuntimeException e) {
-        return buildResponse(HttpStatus.NOT_FOUND, e.getMessage());
-    }
-
+    // 400 - Falha na atualização (Bad Request)
     @ExceptionHandler(AtualizacaoDadosException.class)
-    public ResponseEntity<ErrorResponse> handlerDadosNaoAtualizados(AtualizacaoDadosException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(400, e.getMessage()));
+    public ResponseEntity<ErrorResponse> handlerAtualizacaoDados(AtualizacaoDadosException e) {
+        return buildResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    // 422 - Dados Duplicados ou Inválidos (Unprocessable Entity)
+    @ExceptionHandler({
+            DadosPreenchidosMultiplasVezesException.class,
+            DadosInvalidosException.class
+    })
+    public ResponseEntity<ErrorResponse> handlerDadosNaoProcessaveis(RuntimeException e) {
+        return buildResponse(HttpStatus.UNPROCESSABLE_CONTENT, e.getMessage());
+    }
+
+    // 409 - Conflito (Ex: Falha ao deletar algo que possui dependências)
+    @ExceptionHandler(DadosNaoDeletadosException.class)
+    public ResponseEntity<ErrorResponse> handlerConflito(DadosNaoDeletadosException e) {
+        return buildResponse(HttpStatus.CONFLICT, e.getMessage());
     }
 }
