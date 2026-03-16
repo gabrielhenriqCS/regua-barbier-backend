@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record BarbeiroDTO(
         @NotNull String nome,
-        @NotNull String especialidade,
-        @NotNull Boolean ativo
+        @NotNull String email,
+        @NotNull String senha,
+        @NotNull String telefone
         ) {
 }

@@ -4,6 +4,7 @@ import com.gabriel_henrique.regua_barbier.domain.agendamento.Agendamento;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.AgendamentoDTO;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.StatusAgendamento;
 import com.gabriel_henrique.regua_barbier.service.AgendamentoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/agendamentos")
+@Tag(name = "Agendamentos", description = "Controlador para realização de agendamentos, atualizações, deletação e listagem com base no status.")
 public class AgendamentoController {
     private final AgendamentoService agendamentoService;
 

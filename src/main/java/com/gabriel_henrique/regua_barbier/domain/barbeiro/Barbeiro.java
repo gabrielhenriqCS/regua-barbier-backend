@@ -22,6 +22,15 @@ public class Barbeiro {
     private String nome;
 
     @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String senha;
+
+    @Column(nullable = false)
+    private String telefone;
+
+    @Column(nullable = false)
     private String especialidade;
 
     @Column(nullable = false)
