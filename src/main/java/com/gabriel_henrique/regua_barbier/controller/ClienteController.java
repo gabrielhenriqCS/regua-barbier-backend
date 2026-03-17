@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Cliente> cadastrarCliente(@RequestBody @Valid ClienteDTO dto, UriComponentsBuilder uriBuilder) {
         Cliente novoCliente = clienteService.novoCliente(dto);
-        var uri = uriBuilder.path("/clientes/{id}")
+        URI uri = uriBuilder.path("/clientes/{id}")
                 .buildAndExpand(novoCliente.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(novoCliente);

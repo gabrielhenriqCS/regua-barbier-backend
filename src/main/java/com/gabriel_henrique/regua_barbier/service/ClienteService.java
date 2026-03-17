@@ -5,9 +5,10 @@ import com.gabriel_henrique.regua_barbier.domain.cliente.Cliente;
 import com.gabriel_henrique.regua_barbier.domain.cliente.exceptions.ClienteNaoEncontrado;
 import com.gabriel_henrique.regua_barbier.infra.DadosInvalidosException;
 import com.gabriel_henrique.regua_barbier.infra.DadosPreenchidosMultiplasVezesException;
-import com.gabriel_henrique.regua_barbier.repository.ClientesRepository;
+import com.gabriel_henrique.regua_barbier.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,52 +18,58 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClienteService {
 
-    private final ClientesRepository clientesRepository;
+    private final ClienteRepository clienteRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Cliente> mostrarClientes() {
-        return clientesRepository.findAll();
+        return clienteRepository.findAll();
     }
 
     @Transactional
     public Cliente mostrarCliente(UUID id) {
-        return clientesRepository.findById(id)
+        return clienteRepository.findById(id)
                 .orElseThrow(ClienteNaoEncontrado::new);
     }
 
     @Transactional
     public Cliente novoCliente(ClienteDTO dto) {
-        if (dto.nome() == null || dto.nome().isBlank()) {
-            throw new DadosInvalidosException("Nome não preenchido. Por favor preencha o nome para prosseguir.");
+        if (dto.nome() == null) {
+            throw new DadosInvalidosException("Nome não preenchido. Por favor preencha para prosseguir.");
         }
 
-        if (dto.email() == null || dto.email().isBlank()) {
-            throw new DadosInvalidosException("Email não preenchido. Por favor preencha o email para prosseguir.");
+        if (dto.email() == null) {
+            throw new DadosInvalidosException("Email não preenchido. Por favor preencha para prosseguir.");
         }
 
-        if (dto.telefone() == null || dto.telefone().isBlank()) {
-            throw new DadosInvalidosException("Telefone não preenchido. Por favor preencha o telefone para prosseguir.");
+        if (dto.senha() == null) {
+            throw new DadosInvalidosException("Senha não preecnhida. Por favor preecnha para prosseguir");
+        }
+
+        if (dto.telefone() == null) {
+            throw new DadosInvalidosException("Telefone não preenchido. Por favor preencha para prosseguir.");
         }
 
         var cliente = Cliente.builder()
                 .nome(dto.nome())
                 .telefone(dto.telefone())
                 .email(dto.email())
+                .senha(passwordEncoder.encode(dto.senha()))
                 .build();
 
-        return clientesRepository.save(cliente);
+        return clienteRepository.save(cliente);
     }
 
     @Transactional
     public void removerCliente(UUID id) {
-        if (!clientesRepository.existsById(id)) {
+        if (!clienteRepository.existsById(id)) {
             throw new ClienteNaoEncontrado();
         }
-        clientesRepository.deleteById(id);
+        clienteRepository.deleteById(id);
     }
 
     @Transactional
     public void atualizarCliente(UUID id, ClienteDTO dto) {
-        Cliente cliente = clientesRepository.findById(id)
+        Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(ClienteNaoEncontrado::new);
 
         if (cliente.getNome().equals(dto.nome()) &&

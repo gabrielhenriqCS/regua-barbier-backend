@@ -8,7 +8,7 @@ import com.gabriel_henrique.regua_barbier.domain.servico.exceptions.ServicoNaoEn
 import com.gabriel_henrique.regua_barbier.domain.agendamento.Agendamento;
 import com.gabriel_henrique.regua_barbier.repository.AgendamentoRepository;
 import com.gabriel_henrique.regua_barbier.repository.BarbeiroRepository;
-import com.gabriel_henrique.regua_barbier.repository.ClientesRepository;
+import com.gabriel_henrique.regua_barbier.repository.ClienteRepository;
 import com.gabriel_henrique.regua_barbier.repository.ServicoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class AgendamentoService {
     private final BarbeiroRepository barbeiroRepository;
 
 
-    private final ClientesRepository clientesRepository;
+    private final ClienteRepository clienteRepository;
 
 
     private final ServicoRepository servicoRepository;
@@ -39,7 +39,7 @@ public class AgendamentoService {
         var barbeiro = barbeiroRepository.findById(dto.barbeiroId().getId())
                 .orElseThrow(() -> new BarbeiroNaoEncontrado("Barbeiro não encontrado!"));
 
-        var cliente = clientesRepository.findById(dto.clienteId().getId())
+        var cliente = clienteRepository.findById(dto.clienteId().getId())
                 .orElseThrow(() -> new ClienteNaoEncontrado("Cliente não encontrado!"));
 
         var servico = servicoRepository.findById(dto.servicoId().getId())
