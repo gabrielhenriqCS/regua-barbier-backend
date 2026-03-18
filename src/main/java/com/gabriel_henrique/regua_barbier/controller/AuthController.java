@@ -1,6 +1,7 @@
 package com.gabriel_henrique.regua_barbier.controller;
 
 import com.gabriel_henrique.regua_barbier.config.TokenConfig;
+import com.gabriel_henrique.regua_barbier.domain.UsuarioRole;
 import com.gabriel_henrique.regua_barbier.domain.auth.Cadastrar;
 import com.gabriel_henrique.regua_barbier.domain.auth.LoginRequest;
 import com.gabriel_henrique.regua_barbier.domain.auth.LoginResponse;
@@ -33,17 +34,23 @@ public class AuthController {
         UsernamePasswordAuthenticationToken usuarioESenha = new UsernamePasswordAuthenticationToken(request.email(), request.senha());
         Authentication authentication = authenticationManager.authenticate(usuarioESenha);
 
-        Cliente cliente = (Cliente) authentication.getPrincipal();
-        String token = tokenConfig.gerarToken(cliente);
-        return ResponseEntity.ok(new LoginResponse(token));
+        if (authentication.getPrincipal() instanceof Cliente cliente) {
+            String token = tokenConfig.gerarToken(cliente);
+            return ResponseEntity.ok(new LoginResponse(token));
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Cadastrar> cadastrar(@RequestBody @Valid Cadastrar request) {
         Cliente cliente = new Cliente();
-        cliente.setSenha(passwordEncoder.encode(request.senha()));
+        cliente.setNome(request.nome());
         cliente.setEmail(request.email());
         cliente.setTelefone(request.telefone());
+        cliente.setSenha(passwordEncoder.encode(request.senha()));
+
+        cliente.setRole(UsuarioRole.CLIENTE);
 
         clienteRepository.save(cliente);
 

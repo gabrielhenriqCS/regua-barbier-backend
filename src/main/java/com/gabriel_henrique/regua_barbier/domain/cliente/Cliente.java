@@ -1,20 +1,18 @@
 package com.gabriel_henrique.regua_barbier.domain.cliente;
 
+import com.gabriel_henrique.regua_barbier.domain.UsuarioRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "clientes")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -37,19 +35,28 @@ public class Cliente implements UserDetails {
     @Column(nullable = false, unique = true)
     private String senha;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_role", joinColumns = @JoinColumn(name = "cliente_id"))
+    @Enumerated(EnumType.STRING)
+    @Column
+    private UsuarioRole role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (role == UsuarioRole.CLIENTE) {
+            return List.of(new SimpleGrantedAuthority("cliente"));
+        }
+        return List.of(new SimpleGrantedAuthority("cliente"));
     }
 
     @Override
     public String getPassword() {
-        return senha;
+        return this.senha;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
     @Override

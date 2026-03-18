@@ -1,5 +1,6 @@
 package com.gabriel_henrique.regua_barbier.domain.barbeiro;
 
+import com.gabriel_henrique.regua_barbier.domain.UsuarioRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,8 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "barbeiros")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -29,6 +29,12 @@ public class Barbeiro {
 
     @Column(nullable = false)
     private String telefone;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_role", joinColumns = @JoinColumn(name = "barbeiro_id"))
+    @Enumerated(EnumType.STRING)
+    @Column
+    private UsuarioRole role;
 
     @Column(nullable = false)
     private String especialidade;

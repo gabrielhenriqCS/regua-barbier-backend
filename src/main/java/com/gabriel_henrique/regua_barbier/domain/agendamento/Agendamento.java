@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "agendamento")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

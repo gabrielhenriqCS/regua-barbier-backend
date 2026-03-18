@@ -30,7 +30,7 @@ class BarbeiroServiceTest {
     @Test
     @DisplayName("Deve cadastrar um barbeiro")
     void cadastrarBarbeiroComSucesso() {
-        var dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "1123669451");
+        var dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "julio_2004JL", "85912345665");
 
         var barbeiro = Barbeiro.builder()
                 .id(UUID.randomUUID())
@@ -52,7 +52,7 @@ class BarbeiroServiceTest {
     @Test
     @DisplayName("Deve ocorrer um erro ao cadastrar barbeiro com dados duplicados")
     void cadastrarBarbeiroComErroDeDados() {
-        var dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "1123669451");
+        var dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "julio2004JL", "85977632144");
         when(barbeiroRepository.existsByEmail(dto.email())).thenReturn(true);
 
         assertThrows(DadosPreenchidosMultiplasVezesException.class, () -> {

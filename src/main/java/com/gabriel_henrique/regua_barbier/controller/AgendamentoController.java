@@ -4,6 +4,7 @@ import com.gabriel_henrique.regua_barbier.domain.agendamento.Agendamento;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.AgendamentoDTO;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.StatusAgendamento;
 import com.gabriel_henrique.regua_barbier.service.AgendamentoService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,13 @@ import java.util.List;
 public class AgendamentoController {
     private final AgendamentoService agendamentoService;
 
+    @Operation(summary = "Lista todos os agendamentos", description = "Retorna agendamentos com base no status")
     @GetMapping
     public ResponseEntity<List<Agendamento>> listarAgendamentos(@RequestParam StatusAgendamento status) {
         return ResponseEntity.ok(agendamentoService.listarAgendamentos(status));
     }
 
+    @Operation(summary = "Fazer agendamento", description = "Retorna cliente agendadado com os seguintes dados: barbeiro, tipo de procedimento, data de início e data fim")
     @PostMapping
     public ResponseEntity<Agendamento> agendarProcedimento(@RequestBody @Valid AgendamentoDTO dto, UriComponentsBuilder uriBuilder) {
         Agendamento agendamento = agendamentoService.fazerAgendamento(dto);
@@ -33,6 +36,7 @@ public class AgendamentoController {
                 .toUri();
         return ResponseEntity.created(uri).body(agendamento);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> modificarAgendamento(@PathVariable("id") Long id, @RequestBody @Valid AgendamentoDTO dto) {
