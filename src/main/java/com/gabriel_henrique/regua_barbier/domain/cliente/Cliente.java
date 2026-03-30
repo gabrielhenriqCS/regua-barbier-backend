@@ -1,6 +1,7 @@
 package com.gabriel_henrique.regua_barbier.domain.cliente;
 
 import com.gabriel_henrique.regua_barbier.domain.UsuarioRole;
+import com.gabriel_henrique.regua_barbier.domain.pagamento.Pagamento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -40,6 +41,9 @@ public class Cliente implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column
     private UsuarioRole role;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Pagamento> pagamentos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

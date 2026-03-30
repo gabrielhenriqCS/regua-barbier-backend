@@ -2,6 +2,7 @@ package com.gabriel_henrique.regua_barbier.domain.agendamento;
 
 import com.gabriel_henrique.regua_barbier.domain.barbeiro.Barbeiro;
 import com.gabriel_henrique.regua_barbier.domain.cliente.Cliente;
+import com.gabriel_henrique.regua_barbier.domain.pagamento.PagamentoStatus;
 import com.gabriel_henrique.regua_barbier.domain.servico.Servico;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,11 +33,25 @@ public class Agendamento {
     @JoinColumn(name = "servico_id")
     private Servico servico;
 
-    @Column(nullable = false)
-    private LocalDateTime dataHoraInicio;
-    private LocalDateTime dataHoraFim;
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataInicio;
+
+    @PrePersist
+    protected void onCreate() {
+        this.dataInicio = LocalDateTime.now();
+        if (this.statusAgendamento == null) {
+            this.statusAgendamento = StatusAgendamento.AGENDADO;
+        }
+    }
+
+    @Column(name = "data_termino", nullable = false)
+    private LocalDateTime dataTermino;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusAgendamento status;
+    @Column(name = "status_agendamento", nullable = false)
+    private StatusAgendamento statusAgendamento;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_pagamento", nullable = false)
+    private PagamentoStatus statusPagamento = PagamentoStatus.PENDENTE;
 }

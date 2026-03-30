@@ -1,5 +1,6 @@
 package com.gabriel_henrique.regua_barbier.controller;
 
+import com.gabriel_henrique.regua_barbier.docs.ClienteApiDocs;
 import com.gabriel_henrique.regua_barbier.domain.cliente.ClienteDTO;
 import com.gabriel_henrique.regua_barbier.domain.cliente.Cliente;
 import com.gabriel_henrique.regua_barbier.service.ClienteService;
@@ -16,17 +17,19 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clientes")
-public class ClienteController {
+public class ClienteController implements ClienteApiDocs {
 
     private final ClienteService clienteService;
 
+    @Override
     @GetMapping
     public ResponseEntity<List<Cliente>> mostrarTodosClientes() {
         return ResponseEntity.ok(clienteService.mostrarClientes());
     }
 
+    @Override
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> encontrarCliente(@PathVariable UUID id) {
+    public ResponseEntity<Cliente> encontrarCliente(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(clienteService.mostrarCliente(id));
     }
 

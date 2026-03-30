@@ -1,9 +1,11 @@
 package com.gabriel_henrique.regua_barbier.service;
 
+import com.gabriel_henrique.regua_barbier.domain.UsuarioRole;
 import com.gabriel_henrique.regua_barbier.domain.barbeiro.Barbeiro;
 import com.gabriel_henrique.regua_barbier.domain.barbeiro.BarbeiroDTO;
 import com.gabriel_henrique.regua_barbier.infra.DadosPreenchidosMultiplasVezesException;
 import com.gabriel_henrique.regua_barbier.repository.BarbeiroRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +29,28 @@ class BarbeiroServiceTest {
     @Mock
     private BarbeiroRepository barbeiroRepository;
 
+    private UUID id;
+    private Barbeiro barbeiroExistente;
+
+    @BeforeEach
+    void setUp() {
+        id = UUID.randomUUID();
+
+        barbeiroExistente = Barbeiro.builder()
+                .nome("Daniel Santos")
+                .email("danielsant@email.com")
+                .senha("danisant_5423")
+                .telefone("85985645423")
+                .role(UsuarioRole.BARBEIRO)
+                .especialidade("Corte e Barba")
+                .ativo(true)
+                .build();
+    }
+
     @Test
     @DisplayName("Deve cadastrar um barbeiro")
     void cadastrarBarbeiroComSucesso() {
-        var dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "julio_2004JL", "85912345665");
+        BarbeiroDTO dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "julio_2004JL", "85912345665");
 
         var barbeiro = Barbeiro.builder()
                 .id(UUID.randomUUID())
@@ -52,7 +72,7 @@ class BarbeiroServiceTest {
     @Test
     @DisplayName("Deve ocorrer um erro ao cadastrar barbeiro com dados duplicados")
     void cadastrarBarbeiroComErroDeDados() {
-        var dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "julio2004JL", "85977632144");
+        BarbeiroDTO dto = new BarbeiroDTO("Júlio César", "juliocesar@email.com", "julio2004JL", "85977632144");
         when(barbeiroRepository.existsByEmail(dto.email())).thenReturn(true);
 
         assertThrows(DadosPreenchidosMultiplasVezesException.class, () -> {
@@ -61,9 +81,12 @@ class BarbeiroServiceTest {
         verify(barbeiroRepository, never()).save(any());
     }
 
-    @Test
-    @DisplayName("Deve ocorrer erro de duplicata ao atualizar cadastro")
-    void erroAoAtualizarDados() {
-
-    }
+//    @Test
+//    @DisplayName("Deve ocorrer erro de duplicata ao atualizar cadastro")
+//    void deveExibirErroAoAtualizarDados() {
+//        BarbeiroDTO dadosIguais = new BarbeiroDTO("Júlio César", "juliolema@email.com", "julio2345JD", "11987456336");
+//        when(barbeiroRepository.existsByEmail(dadosIguais.email())).thenReturn(true);
+//
+//        assertThrows(AtualizacaoDadosException.class, () )
+//    }
 }

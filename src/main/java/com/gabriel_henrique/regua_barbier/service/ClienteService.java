@@ -49,7 +49,7 @@ public class ClienteService {
             throw new DadosInvalidosException("Telefone não preenchido. Por favor preencha para prosseguir.");
         }
 
-        var cliente = Cliente.builder()
+        Cliente cliente = Cliente.builder()
                 .nome(dto.nome())
                 .telefone(dto.telefone())
                 .email(dto.email())

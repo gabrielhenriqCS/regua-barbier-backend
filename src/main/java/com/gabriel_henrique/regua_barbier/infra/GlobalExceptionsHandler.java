@@ -36,7 +36,8 @@ public class GlobalExceptionsHandler {
     // 422 - Dados Duplicados ou Inválidos (Unprocessable Entity)
     @ExceptionHandler({
             DadosPreenchidosMultiplasVezesException.class,
-            DadosInvalidosException.class
+            DadosInvalidosException.class,
+            ConflitoDeHorarioException.class
     })
     public ResponseEntity<ErrorResponse> handlerDadosNaoProcessaveis(RuntimeException e) {
         return buildResponse(HttpStatus.UNPROCESSABLE_CONTENT, e.getMessage());

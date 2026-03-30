@@ -12,7 +12,6 @@ public record AgendamentoDTO(
         @NotNull Barbeiro barbeiroId,
         @NotNull Cliente clienteId,
         @NotNull Servico servicoId,
-        @NotNull @Future LocalDateTime dataHoraInicio,
-        @NotNull @Future LocalDateTime dataHoraFim
+        @NotNull LocalDateTime dataHoraInicio
         ) {
 }

@@ -1,0 +1,12 @@
+package com.gabriel_henrique.regua_barbier.controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/pagamentos")
+public class PagamentosController {
+
+
+}

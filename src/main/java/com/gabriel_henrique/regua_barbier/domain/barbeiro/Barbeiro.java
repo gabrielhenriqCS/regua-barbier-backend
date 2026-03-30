@@ -30,11 +30,9 @@ public class Barbeiro {
     @Column(nullable = false)
     private String telefone;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "usuario_role", joinColumns = @JoinColumn(name = "barbeiro_id"))
     @Enumerated(EnumType.STRING)
     @Column
-    private UsuarioRole role;
+    private UsuarioRole role = UsuarioRole.BARBEIRO;
 
     @Column(nullable = false)
     private String especialidade;
