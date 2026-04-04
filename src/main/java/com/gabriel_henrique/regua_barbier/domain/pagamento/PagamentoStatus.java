@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum PagamentoStatus {
-    PENDENTE("pendente"), APROVADO("aprovado"), RECUSADO("recusado");
+    PENDENTE("pendente"), APROVADO("aprovado"), RECUSADO("recusado"), PAGO("pago");
 
     private String status;
 

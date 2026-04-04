@@ -3,6 +3,8 @@ package com.gabriel_henrique.regua_barbier.domain.servico;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "servico")
 @Data
@@ -19,7 +21,7 @@ public class Servico {
     private String nome;
 
     @Column(nullable = false)
-    private Float preco;
+    private BigDecimal preco;
 
     @Column(nullable = false)
     private Integer duracaoMinutos;

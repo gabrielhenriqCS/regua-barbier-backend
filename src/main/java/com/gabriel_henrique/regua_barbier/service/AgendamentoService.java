@@ -2,11 +2,13 @@ package com.gabriel_henrique.regua_barbier.service;
 
 import com.gabriel_henrique.regua_barbier.domain.agendamento.AgendamentoDTO;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.StatusAgendamento;
+import com.gabriel_henrique.regua_barbier.domain.agendamento.exceptions.AgendamentoNaoEncontrado;
 import com.gabriel_henrique.regua_barbier.domain.barbeiro.exceptions.BarbeiroNaoEncontrado;
 import com.gabriel_henrique.regua_barbier.domain.cliente.exceptions.ClienteNaoEncontrado;
 import com.gabriel_henrique.regua_barbier.domain.pagamento.PagamentoStatus;
 import com.gabriel_henrique.regua_barbier.domain.servico.exceptions.ServicoNaoEncontrado;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.Agendamento;
+import com.gabriel_henrique.regua_barbier.infra.AtualizacaoDadosException;
 import com.gabriel_henrique.regua_barbier.infra.ConflitoDeHorarioException;
 import com.gabriel_henrique.regua_barbier.infra.DadosInvalidosException;
 import com.gabriel_henrique.regua_barbier.repository.AgendamentoRepository;
@@ -66,7 +68,7 @@ public class AgendamentoService {
                 .servico(servico)
                 .dataInicio(inicio_procedimento)
                 .dataTermino(fim_procedimento)
-                .statusAgendamento(StatusAgendamento.AGENDADO)
+                .statusAgendamento(StatusAgendamento.PENDENTE_PAGAMENTO)
                 .statusPagamento(PagamentoStatus.PENDENTE)
                 .build();
 
@@ -80,7 +82,7 @@ public class AgendamentoService {
     @Transactional
     public void atualizarAgendamento(Long id, AgendamentoDTO dto) {
         var agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não foi possível encontrar o agendamento"));
+                .orElseThrow(() -> new AtualizacaoDadosException("Não foi possível encontrar o agendamento"));
         agendamento.setDataInicio(dto.dataHoraInicio());
         agendamentoRepository.save(agendamento);
     }
@@ -88,7 +90,7 @@ public class AgendamentoService {
     @Transactional
     public void removerAgendamento(Long id) {
         var agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+                .orElseThrow(() -> new AgendamentoNaoEncontrado("Agendamento não encontrado"));
         agendamentoRepository.delete(agendamento);
     }
 }

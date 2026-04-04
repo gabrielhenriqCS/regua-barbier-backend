@@ -40,7 +40,7 @@ public class Agendamento {
     protected void onCreate() {
         this.dataInicio = LocalDateTime.now();
         if (this.statusAgendamento == null) {
-            this.statusAgendamento = StatusAgendamento.AGENDADO;
+            this.statusAgendamento = StatusAgendamento.PENDENTE_PAGAMENTO;
         }
     }
 
