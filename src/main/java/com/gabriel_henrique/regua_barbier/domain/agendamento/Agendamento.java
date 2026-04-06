@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "agendamento")
@@ -17,9 +18,9 @@ import java.time.LocalDateTime;
 @Builder
 public class Agendamento {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "agendamento_id")
-    private Long id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "barbeiro_id")
@@ -34,18 +35,21 @@ public class Agendamento {
     private Servico servico;
 
     @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
+
+    @Column(name = "data_inicio", nullable = false)
     private LocalDateTime dataInicio;
+
+    @Column(name = "data_termino", nullable = false)
+    private LocalDateTime dataTermino;
 
     @PrePersist
     protected void onCreate() {
-        this.dataInicio = LocalDateTime.now();
+        this.dataCriacao = LocalDateTime.now();
         if (this.statusAgendamento == null) {
             this.statusAgendamento = StatusAgendamento.PENDENTE_PAGAMENTO;
         }
     }
-
-    @Column(name = "data_termino", nullable = false)
-    private LocalDateTime dataTermino;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_agendamento", nullable = false)

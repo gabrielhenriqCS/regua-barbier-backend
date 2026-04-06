@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
     List<Pagamento> findByAgendamentoClienteId(Long clienteId);
     List<Pagamento> findByFormaDePagamento(FormaDePagamento formaDePagamento);
-    Optional<Pagamento> findByTransacaoIdExterno(String transacaoIdExterno);
-    List<Pagamento> findByStatusEDataCriacaoAntes(PagamentoStatus status, LocalDateTime limite);
+    Optional<Pagamento> findByIdTransacaoExterno(String idTransacaoExterno);
+    List<Pagamento> findByStatusAndDataCriacaoBefore(PagamentoStatus status, LocalDateTime limite);
 }

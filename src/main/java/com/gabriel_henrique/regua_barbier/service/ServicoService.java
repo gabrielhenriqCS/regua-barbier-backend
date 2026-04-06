@@ -3,7 +3,7 @@ package com.gabriel_henrique.regua_barbier.service;
 import com.gabriel_henrique.regua_barbier.domain.servico.ServicoDTO;
 import com.gabriel_henrique.regua_barbier.domain.servico.Servico;
 import com.gabriel_henrique.regua_barbier.domain.servico.exceptions.ServicoNaoEncontrado;
-import com.gabriel_henrique.regua_barbier.infra.DadosInvalidosException;
+import com.gabriel_henrique.regua_barbier.exceptions.DadosInvalidosException;
 import com.gabriel_henrique.regua_barbier.repository.ServicoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -17,17 +17,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/agendamentos")
-@Tag(name = "Agendamentos", description = "Controlador para realização de agendamentos, atualizações, deletação e listagem com base no status.")
 public class AgendamentoController {
     private final AgendamentoService agendamentoService;
 
-    @Operation(summary = "Lista todos os agendamentos", description = "Retorna agendamentos com base no status")
     @GetMapping
     public ResponseEntity<List<Agendamento>> listarAgendamentos(@RequestParam StatusAgendamento status) {
         return ResponseEntity.ok(agendamentoService.listarAgendamentos(status));
     }
 
-    @Operation(summary = "Fazer agendamento", description = "Retorna cliente agendadado com os seguintes dados: barbeiro, tipo de procedimento, data de início e data fim")
     @PostMapping
     public ResponseEntity<Agendamento> agendarProcedimento(@RequestBody @Valid AgendamentoDTO dto, UriComponentsBuilder uriBuilder) {
         Agendamento agendamento = agendamentoService.fazerAgendamento(dto);

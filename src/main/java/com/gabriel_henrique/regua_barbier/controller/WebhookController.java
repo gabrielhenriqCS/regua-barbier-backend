@@ -14,19 +14,23 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/pagamentos/")
-public class PagamentosController {
+public class WebhookController {
 
     private final PagamentosService pagamentosService;
 
     @PostMapping("/mercado-pago")
     public ResponseEntity<Void> receberNotificacaoMP(@RequestBody Map<String, Object> payload) {
         try {
-            String idExterno = payload.get("data").toString();
-            String status = "aprovado";
-            pagamentosService.processarTransacaoDePagamento(idExterno, status);
+            String action = (String) payload.get("action");
+            if ("payment.updated".equals(action) || "payment.created".equals(action)) {
+                Map<String, Object> data = (Map<String, Object>) payload.get("data");
+                String idExterno = data.get("id").toString();
+                String statusMP = payload.get("action").toString();
+                pagamentosService.verificarEAtualizarStatus(idExterno, statusMP);
+            }
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.SC_UNPROCESSABLE_ENTITY).build();
+            return ResponseEntity.unprocessableContent().build();
         }
     }
 }

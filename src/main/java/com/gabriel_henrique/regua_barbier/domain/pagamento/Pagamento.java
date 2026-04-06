@@ -24,15 +24,15 @@ public class Pagamento {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @OneToOne
-    @JoinColumn(name = "agendamento_id")
-    private Agendamento agendamento;
-
     @Column(name = "id_transacao_externo",unique = true)
     private String idTransacaoExterno;
 
     @Column(nullable = false)
     private String nomeCliente;
+
+    @OneToOne
+    @JoinColumn(name = "agendamento_id")
+    private Agendamento agendamento;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "forma_de_pagamento")

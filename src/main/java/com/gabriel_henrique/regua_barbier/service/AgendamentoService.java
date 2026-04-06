@@ -8,9 +8,9 @@ import com.gabriel_henrique.regua_barbier.domain.cliente.exceptions.ClienteNaoEn
 import com.gabriel_henrique.regua_barbier.domain.pagamento.PagamentoStatus;
 import com.gabriel_henrique.regua_barbier.domain.servico.exceptions.ServicoNaoEncontrado;
 import com.gabriel_henrique.regua_barbier.domain.agendamento.Agendamento;
-import com.gabriel_henrique.regua_barbier.infra.AtualizacaoDadosException;
-import com.gabriel_henrique.regua_barbier.infra.ConflitoDeHorarioException;
-import com.gabriel_henrique.regua_barbier.infra.DadosInvalidosException;
+import com.gabriel_henrique.regua_barbier.exceptions.AtualizacaoDadosException;
+import com.gabriel_henrique.regua_barbier.exceptions.ConflitoDeHorarioException;
+import com.gabriel_henrique.regua_barbier.exceptions.DadosInvalidosException;
 import com.gabriel_henrique.regua_barbier.repository.AgendamentoRepository;
 import com.gabriel_henrique.regua_barbier.repository.BarbeiroRepository;
 import com.gabriel_henrique.regua_barbier.repository.ClienteRepository;
@@ -38,7 +38,7 @@ public class AgendamentoService {
     private final ServicoRepository servicoRepository;
 
     public List<Agendamento> listarAgendamentos(StatusAgendamento status) {
-        return agendamentoRepository.findByStatus(status);
+        return agendamentoRepository.findByStatusAgendamento(status);
     }
 
     @Transactional

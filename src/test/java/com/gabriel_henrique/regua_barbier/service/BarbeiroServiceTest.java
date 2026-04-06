@@ -3,7 +3,7 @@ package com.gabriel_henrique.regua_barbier.service;
 import com.gabriel_henrique.regua_barbier.domain.UsuarioRole;
 import com.gabriel_henrique.regua_barbier.domain.barbeiro.Barbeiro;
 import com.gabriel_henrique.regua_barbier.domain.barbeiro.BarbeiroDTO;
-import com.gabriel_henrique.regua_barbier.infra.DadosPreenchidosMultiplasVezesException;
+import com.gabriel_henrique.regua_barbier.exceptions.DadosPreenchidosMultiplasVezesException;
 import com.gabriel_henrique.regua_barbier.repository.BarbeiroRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

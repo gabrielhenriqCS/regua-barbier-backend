@@ -36,20 +36,15 @@ public class Cliente implements UserDetails {
     @Column(nullable = false, unique = true)
     private String senha;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "usuario_role", joinColumns = @JoinColumn(name = "cliente_id"))
     @Enumerated(EnumType.STRING)
-    @Column
-    private UsuarioRole role;
+    @Column(name = "role", nullable = false)
+    private UsuarioRole role = UsuarioRole.CLIENTE;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pagamento> pagamentos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role == UsuarioRole.CLIENTE) {
-            return List.of(new SimpleGrantedAuthority("cliente"));
-        }
         return List.of(new SimpleGrantedAuthority("cliente"));
     }
 
