@@ -22,29 +22,30 @@ public class PagamentosService {
     private final AgendamentoRepository agendamentoRepository;
 
     @Transactional
-    public void verificarEAtualizarStatus(String idTransacaoExterno, String novoStatus) {
-        Pagamento pagamento = pagamentosRepository.findByIdTransacaoExterno(idTransacaoExterno)
-                .orElseThrow(() -> new DadosInvalidosException("Pagamento não encontrado para o ID: " + idTransacaoExterno));
+    public void verificarEAtualizarStatus(String idPagamentoMercadoPago, String statusReal) {
+        Pagamento pagamento = pagamentosRepository.findByIdTransacaoExterno(idPagamentoMercadoPago)
+                .orElseThrow(() -> new DadosInvalidosException("Pagamento não encontrado para o ID: " + idPagamentoMercadoPago));
+
+        if (pagamento.getIdTransacaoExterno() == null) {
+            pagamento.setIdTransacaoExterno(idPagamentoMercadoPago);
+        }
 
         if (pagamento.getStatus() == PagamentoStatus.APROVADO) {
-            log.info("Pagamento {} já estava aprovado anteriormente.", idTransacaoExterno);
+            log.info("Pagamento {} já estava aprovado anteriormente.", idPagamentoMercadoPago);
             return;
         }
 
-        if ("approved".equalsIgnoreCase(novoStatus)) {
-            pagamento.setStatus(PagamentoStatus.APROVADO);
-            Agendamento agendamento = pagamento.getAgendamento();
-            agendamento.setStatusAgendamento(StatusAgendamento.CONCLUIDO);
-
-            pagamentosRepository.save(pagamento);
-            agendamentoRepository.save(agendamento);
-
-            log.info("Sucesso: Agendamento " + agendamento.getId() + "confirmado via Pagamento");
-
+        switch (statusReal.toLowerCase()) {
+            case "approved" -> aprovarPagamento(pagamento);
+            case "rejected", "cancelled" -> cancelarPagamento(pagamento);
+            case "pending", "in_process" -> log.info("Pagamento {} ainda pendente.", pagamento);
+            default -> log.warn("Status {} desconhecido.", statusReal);
         }
+
+
     }
 
-    private void aprovarTudo(Pagamento pagamento) {
+    private void aprovarPagamento(Pagamento pagamento) {
         pagamento.setStatus(PagamentoStatus.APROVADO);
         pagamento.setDataConfirmacaoPagamento(LocalDateTime.now());
 
@@ -57,7 +58,7 @@ public class PagamentosService {
         log.info("SUCESSO: Agendamento {} confirmado via cartão/PIX", agendamento.getId());
     }
 
-    private void cancelarTudo(Pagamento pagamento) {
+    private void cancelarPagamento(Pagamento pagamento) {
         pagamento.setStatus(PagamentoStatus.RECUSADO);
         pagamento.getAgendamento().setStatusAgendamento(StatusAgendamento.CANCELADO);
 

@@ -1,36 +1,33 @@
 package com.gabriel_henrique.regua_barbier.controller;
 
-import com.gabriel_henrique.regua_barbier.service.PagamentosService;
-import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.gabriel_henrique.regua_barbier.domain.mercado_pago.MercadoPagoNotificationDTO;
+import com.gabriel_henrique.regua_barbier.service.MercadoPagoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/pagamentos/")
 public class WebhookController {
 
-    private final PagamentosService pagamentosService;
+    private final MercadoPagoService mercadoPagoService;
+
+    @Value("${api.mercadoo-pago.client-secret}")
+    private String secret;
 
     @PostMapping("/mercado-pago")
-    public ResponseEntity<Void> receberNotificacaoMP(@RequestBody Map<String, Object> payload) {
-        try {
-            String action = (String) payload.get("action");
-            if ("payment.updated".equals(action) || "payment.created".equals(action)) {
-                Map<String, Object> data = (Map<String, Object>) payload.get("data");
-                String idExterno = data.get("id").toString();
-                String statusMP = payload.get("action").toString();
-                pagamentosService.verificarEAtualizarStatus(idExterno, statusMP);
-            }
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableContent().build();
+    public ResponseEntity<Void> receberNotificacaoMP(@RequestHeader("x-signature") String signature,
+                                                     @RequestHeader("x-request-id") String requestId,
+                                                     @RequestBody MercadoPagoNotificationDTO payload) {
+
+
+        if ("payment".equals(payload.getType())) {
+            mercadoPagoService.processarNotificacao(payload.getData().getId());
         }
+        return ResponseEntity.ok().build();
     }
 }

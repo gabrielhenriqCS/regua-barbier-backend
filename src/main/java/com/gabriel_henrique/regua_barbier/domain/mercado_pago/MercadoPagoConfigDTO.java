@@ -1,6 +1,7 @@
 package com.gabriel_henrique.regua_barbier.domain.mercado_pago;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,7 @@ public class MercadoPagoConfigDTO {
     @JsonProperty("api_version")
     private String apiVersion;
 
-    private Data data;
+    private Date data;
 
     @JsonProperty("date_created")
     private LocalDateTime dateCreated;
@@ -25,7 +26,8 @@ public class MercadoPagoConfigDTO {
     @JsonProperty("user_id")
     private Long userId;
 
-    public static class Data {
+    @Data
+    public static class Date {
         private String id;
     }
 }

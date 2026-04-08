@@ -21,5 +21,4 @@ public class MercadoPagoClient {
         log.info("Mercado Pago SDK inicializado com sucesso!");
     }
 
-
 }

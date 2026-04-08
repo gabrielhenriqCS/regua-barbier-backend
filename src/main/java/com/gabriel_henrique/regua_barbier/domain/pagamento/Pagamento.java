@@ -24,7 +24,7 @@ public class Pagamento {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @Column(name = "id_transacao_externo",unique = true)
+    @Column(name = "id_transacao_externo", unique = true)
     private String idTransacaoExterno;
 
     @Column(nullable = false)

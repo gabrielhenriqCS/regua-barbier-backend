@@ -27,9 +27,10 @@ public class MercadoPagoNotificationDTO {
 
     private String action;
 
-    private Data data;
+    private PaymentData data;
 
-    public static class Data {
+    @Data
+    public static class PaymentData {
         private String id;
     }
 }
